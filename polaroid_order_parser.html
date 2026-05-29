@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polaroid Tamsung — Order Parser</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f5f3;
+    --surface: #ffffff;
+    --surface2: #f0f0ee;
+    --border: #e0e0dc;
+    --accent: #2d7a3a;
+    --accent2: #1a6b6b;
+    --text: #1a1a1a;
+    --muted: #888;
+    --danger: #c0392b;
+    --success: #2d7a3a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 15px;
+    min-height: 100vh;
+    padding: 24px 16px;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: #2d7a3a;
+    background: rgba(45,122,58,0.08);
+    border: 1px solid rgba(45,122,58,0.2);
+    padding: 6px 10px;
+    border-radius: 6px;
+    letter-spacing: 1px;
+  }
+
+  h1 {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .subtitle { font-size: 13px; color: var(--muted); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .card-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title span { color: var(--accent); font-size: 14px; }
+
+  textarea {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 13px;
+    padding: 12px;
+    resize: vertical;
+    min-height: 140px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  textarea:focus { border-color: var(--accent); }
+
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+
+  .field { display: flex; flex-direction: column; gap: 6px; }
+
+  label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  input, select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  input:focus, select:focus { border-color: var(--accent); }
+
+  .field-full { margin-bottom: 12px; }
+
+  .btn-row { display: flex; gap: 10px; margin-top: 4px; }
+
+  button {
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex: 1;
+  }
+
+  .btn-parse {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-parse:hover { border-color: var(--accent); color: var(--accent); }
+
+  .btn-push {
+    background: #2d7a3a;
+    color: #ffffff;
+  }
+
+  .btn-push:hover { background: #236130; transform: translateY(-1px); }
+  .btn-push:disabled { background: var(--border); color: var(--muted); transform: none; cursor: not-allowed; }
+
+  .btn-clear {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    flex: 0 0 auto;
+    padding: 12px 16px;
+  }
+
+  .btn-clear:hover { color: var(--danger); border-color: var(--danger); }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  .tag-auto { background: rgba(26,107,107,0.1); color: #1a6b6b; }
+  .tag-manual { background: rgba(45,122,58,0.1); color: #2d7a3a; }
+
+  .preview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .preview-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+
+  .preview-label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .preview-val {
+    font-size: 13px;
+    color: var(--text);
+    word-break: break-word;
+  }
+
+  .preview-val.empty { color: var(--muted); font-style: italic; }
+
+  .preview-full {
+    grid-column: 1 / -1;
+  }
+
+  .status-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-top: 12px;
+    display: none;
+  }
+
+  .status-bar.show { display: flex; }
+  .status-success { background: rgba(123,248,200,0.1); border: 1px solid rgba(123,248,200,0.25); color: var(--success); }
+  .status-error { background: rgba(248,123,123,0.1); border: 1px solid rgba(248,123,123,0.25); color: var(--danger); }
+  .status-loading { background: rgba(45,122,58,0.07); border: 1px solid rgba(45,122,58,0.2); color: #2d7a3a; }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-success { background: var(--success); }
+  .dot-error { background: var(--danger); }
+  .dot-loading {
+    background: #f0f7f1;
+    animation: pulse 1s infinite;
+  }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .order-id-display {
+    font-family: 'Space Mono', monospace;
+    font-size: 20px;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 16px 0;
+  }
+
+  .api-url {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    border-radius: 6px;
+    word-break: break-all;
+    margin-bottom: 12px;
+  }
+
+  @media (max-width: 480px) {
+    .row2, .preview-grid { grid-template-columns: 1fr; }
+    .preview-full { grid-column: 1; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">PT</div>
+  <div>
+    <h1>Order Parser</h1>
+    <div class="subtitle">Polaroid Tamsung — push ออเดอร์เข้า Sheet</div>
+  </div>
+</header>
+
+<!-- Step 1: Paste ออเดอร์ -->
+<div class="card">
+  <div class="card-title"><span>①</span> ข้อความออเดอร์ + ที่อยู่</div>
+  <textarea id="rawText" placeholder="Paste ข้อความออเดอร์จาก LINE ทั้งหมด รวมชื่อ ที่อยู่ เบอร์ รอบจัดส่ง..."></textarea>
+  <div style="margin-top:10px; display:flex; gap:8px;">
+    <button class="btn-parse" onclick="parseOrder()">🔍 Parse ข้อมูล</button>
+    <button class="btn-clear" onclick="clearAll()">ล้าง</button>
+  </div>
+</div>
+
+<!-- Step 2: ผลลัพธ์ที่ parse ได้ -->
+<div class="card">
+  <div class="card-title"><span>②</span> ตรวจสอบและแก้ไข</div>
+
+  <div class="row2">
+    <div class="field">
+      <label>รหัสออเดอร์ <span class="tag tag-manual">กรอกเอง</span></label>
+      <input type="text" id="orderId" placeholder="PT-00132" />
+    </div>
+    <div class="field">
+      <label>รอบจัดส่ง <span class="tag tag-auto">auto</span></label>
+      <input type="text" id="shipDate" placeholder="30/05/2026" />
+    </div>
+  </div>
+
+  <div class="row2">
+    <div class="field">
+      <label>ชื่อผู้รับ <span class="tag tag-auto">auto</span></label>
+      <input type="text" id="name" placeholder="ชื่อ-นามสกุล" />
+    </div>
+    <div class="field">
+      <label>เบอร์โทร <span class="tag tag-auto">auto</span></label>
+      <input type="text" id="phone" placeholder="08XXXXXXXX" />
+    </div>
+  </div>
+
+  <div class="field-full field">
+    <label>จังหวัด <span class="tag tag-auto">auto</span></label>
+    <input type="text" id="province" placeholder="จังหวัด..." />
+  </div>
+
+  <div class="field-full field" style="margin-top:12px;">
+    <label>ที่อยู่เต็ม (col L) <span class="tag tag-auto">auto</span></label>
+    <textarea id="address" style="min-height:80px;" placeholder="ชื่อ + ที่อยู่ + เบอร์"></textarea>
+  </div>
+
+  <div class="field-full field" style="margin-top:12px;">
+    <label>รายการสินค้า <span class="tag tag-auto">auto</span></label>
+    <textarea id="items" style="min-height:70px;" placeholder="รายการสินค้า..."></textarea>
+  </div>
+</div>
+
+<!-- Step 3: Push -->
+<div class="card">
+  <div class="card-title"><span>③</span> Push เข้า Google Sheet</div>
+  <div class="api-url" id="apiUrlDisplay">https://script.google.com/macros/s/AKfycbyYgGTwLc7nH8hfvskGcmUCfBYkq7WwDXaRu56KfjWbFopETMsAHE1yQ6XJUPzbK78D/exec</div>
+  <button class="btn-push" onclick="pushToSheet()" id="btnPush">🚀 Push เข้า Sheet</button>
+  <div class="status-bar" id="statusBar">
+    <div class="dot" id="statusDot"></div>
+    <span id="statusMsg"></span>
+  </div>
+</div>
+
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbyYgGTwLc7nH8hfvskGcmUCfBYkq7WwDXaRu56KfjWbFopETMsAHE1yQ6XJUPzbK78D/exec';
+
+function parseOrder() {
+  const raw = document.getElementById('rawText').value.trim();
+  if (!raw) return;
+
+  // ชื่อผู้รับ — บรรทัดแรกที่มีเนื้อหา ก่อนที่อยู่
+  const nameMatch = raw.match(/^([^\n]+)\n.*(?:ม\.|ต\.|อ\.|จ\.|ถ\.|ซ\.|หมู่|เลขที่)/m);
+  if (nameMatch) document.getElementById('name').value = nameMatch[1].trim();
+
+  // เบอร์โทร
+  const phoneMatch = raw.match(/(?:T\.|Tel\.?|โทร\.?|เบอร์[^\d]*)?[:\s]*(0[6-9]\d{8})/i);
+  if (phoneMatch) document.getElementById('phone').value = phoneMatch[1];
+
+  // จังหวัด
+  const provMatch = raw.match(/จ\.\s*([^\s\d\n,]+(?:\s+[^\s\d\n,]+)?)|จังหวัด\s*([^\s\d\n,]+)/);
+  if (provMatch) document.getElementById('province').value = (provMatch[1] || provMatch[2]).trim();
+
+  // รอบจัดส่ง
+  const dateMatch = raw.match(/รอบจัดส่ง[^:]*:\s*(\d{1,2}\/\d{1,2}\/\d{4})/);
+  if (dateMatch) document.getElementById('shipDate').value = dateMatch[1];
+
+  // รายการสินค้า
+  const itemsMatch = raw.match(/(?:งานพิมพ์รูป|สต๊กเกอร์|Photocard|จัดเซ็ต|Die-cut)([\s\S]*?)(?=ค่าสินค้า|━|$)/i);
+  if (itemsMatch) {
+    const items = itemsMatch[0].trim().replace(/\n+/g, '\n');
+    document.getElementById('items').value = items;
+  }
+
+  // ที่อยู่เต็ม — หา block ที่มีชื่อ + ที่อยู่ + เบอร์
+  const addrMatch = raw.match(/([^\n]+)\n([\s\S]*?(?:จ\.[^\n]+\d{5}))\n?(?:T\.|Tel\.?|โทร\.?|เบอร์)?[^\d]*(0[6-9]\d{8})?/);
+  if (addrMatch) {
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const addr = addrMatch[2] ? addrMatch[2].trim() : '';
+    const province = document.getElementById('province').value;
+    document.getElementById('address').value =
+      `${name}\n${addr}\nT.${phone}`.replace(/\n{2,}/g, '\n').trim();
+  }
+}
+
+function clearAll() {
+  ['rawText','orderId','name','phone','province','shipDate','address','items'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  hideStatus();
+}
+
+async function pushToSheet() {
+  const orderId = document.getElementById('orderId').value.trim();
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const province = document.getElementById('province').value.trim();
+  const shipDate = document.getElementById('shipDate').value.trim();
+  const address = document.getElementById('address').value.trim();
+  const items = document.getElementById('items').value.trim();
+
+  if (!orderId) { showStatus('error', 'กรุณากรอกรหัสออเดอร์ก่อนค่ะ'); return; }
+  if (!name) { showStatus('error', 'กรุณากรอกชื่อผู้รับก่อนค่ะ'); return; }
+
+  showStatus('loading', 'กำลัง push เข้า Sheet...');
+  document.getElementById('btnPush').disabled = true;
+
+  const payload = {
+    action: 'addOrder',
+    orderId, name, phone, province, shipDate, address, items
+  };
+
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const json = await res.json();
+    if (json.ok) {
+      showStatus('success', json.msg || 'Push สำเร็จค่ะ! ✨');
+    } else {
+      showStatus('error', json.msg || 'เกิดข้อผิดพลาดค่ะ');
+    }
+  } catch (err) {
+    showStatus('error', 'ไม่สามารถเชื่อมต่อ API ได้: ' + err.message);
+  } finally {
+    document.getElementById('btnPush').disabled = false;
+  }
+}
+
+function showStatus(type, msg) {
+  const bar = document.getElementById('statusBar');
+  const dot = document.getElementById('statusDot');
+  const text = document.getElementById('statusMsg');
+  bar.className = 'status-bar show status-' + type;
+  dot.className = 'dot dot-' + type;
+  text.textContent = msg;
+}
+
+function hideStatus() {
+  document.getElementById('statusBar').className = 'status-bar';
+}
+</script>
+</body>
+</html>
