@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polaroid_tamsung — Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+      background: #F2F2F7;
+      min-height: 100vh;
+      padding: 32px 16px 48px;
+    }
+
+    .wrap {
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+      padding: 0 4px;
+    }
+    .logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: #1C1C1E;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo svg { width: 26px; height: 26px; }
+    .header-text h1 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1C1C1E;
+      letter-spacing: -0.3px;
+    }
+    .header-text p {
+      font-size: 13px;
+      color: #8E8E93;
+      margin-top: 2px;
+      font-weight: 400;
+    }
+
+    .section { margin-bottom: 24px; }
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #6C6C70;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0 4px 10px;
+    }
+
+    .card-group {
+      background: #FFFFFF;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 16px;
+      text-decoration: none;
+      position: relative;
+      transition: background 0.12s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .row:active { background: #F2F2F7; }
+    .row + .row::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 58px;
+      right: 0;
+      height: 0.5px;
+      background: #E5E5EA;
+    }
+
+    .row-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+      color: #fff;
+    }
+    .bg-black  { background: #1C1C1E; }
+    .bg-teal   { background: #34C759; }
+    .bg-blue   { background: #007AFF; }
+    .bg-green  { background: #30B94D; }
+    .bg-indigo { background: #5856D6; }
+    .bg-gray   { background: #8E8E93; }
+
+    .row-text { flex: 1; }
+    .row-name {
+      font-size: 15px;
+      font-weight: 500;
+      color: #1C1C1E;
+      letter-spacing: -0.1px;
+    }
+    .row-desc {
+      font-size: 12px;
+      color: #8E8E93;
+      margin-top: 1px;
+    }
+
+    .chevron {
+      color: #C7C7CC;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #AEAEB2;
+      margin-top: 8px;
+      padding: 0 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="header">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="5" width="18" height="16" rx="2"/>
+          <circle cx="12" cy="13" r="4"/>
+          <rect x="8" y="2" width="8" height="4" rx="1"/>
+        </svg>
+      </div>
+      <div class="header-text">
+        <h1>Polaroid_tamsung</h1>
+        <p>Team Link Dashboard</p>
+      </div>
+    </div>
+
+    <!-- ร้านค้า & ลูกค้า -->
+    <div class="section">
+      <p class="section-title">ร้านค้า & ลูกค้า</p>
+      <div class="card-group">
+        <a class="row" href="https://photolovertamsung.github.io/polaroid-tamsung/" target="_blank" rel="noopener">
+          <div class="row-icon bg-black"><i class="ti ti-home"></i></div>
+          <div class="row-text">
+            <p class="row-name">หน้าร้านหลัก</p>
+            <p class="row-desc">Polaroid_tamsung</p>
+          </div>
+          <i class="ti ti-chevron-right chevron"></i>
+        </a>
+        <a class="row" href="https://photolovertamsung.github.io/polaroid-tracking/index.html" target="_blank" rel="noopener">
+          <div class="row-icon bg-teal"><i class="ti ti-map-pin"></i></div>
+          <div class="row-text">
+            <p class="row-name">ตรวจสอบสถานะ</p>
+            <p class="row-desc">ลูกค้าเช็คพัสดุ</p>
+          </div>
+          <i class="ti ti-chevron-right chevron"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- หลังบ้านทีม -->
+    <div class="section">
+      <p class="section-title">หลังบ้านทีม</p>
+      <div class="card-group">
+        <a class="row" href="https://photolovertamsung.github.io/DB/" target="_blank" rel="noopener">
+          <div class="row-icon bg-blue"><i class="ti ti-layout-dashboard"></i></div>
+          <div class="row-text">
+            <p class="row-name">Dashboard หลัก</p>
+            <p class="row-desc">Polaroid Tamsung DB</p>
+          </div>
+          <i class="ti ti-chevron-right chevron"></i>
+        </a>
+        <a class="row" href="https://docs.google.com/spreadsheets/d/14oLUa0F6VlCxQ2LZGsJgV4oGXICylQPC6vO_aq6deiI/edit?gid=0#gid=0" target="_blank" rel="noopener">
+          <div class="row-icon bg-green"><i class="ti ti-table"></i></div>
+          <div class="row-text">
+            <p class="row-name">ระบบขนส่ง</p>
+            <p class="row-desc">Google Sheets</p>
+          </div>
+          <i class="ti ti-chevron-right chevron"></i>
+        </a>
+        <a class="row" href="https://supabase.com/dashboard/project/zduqfsbohimmvoxiikxf/storage/files/buckets/parcel-photos" target="_blank" rel="noopener">
+          <div class="row-icon bg-indigo"><i class="ti ti-photo"></i></div>
+          <div class="row-text">
+            <p class="row-name">รูปพัสดุ</p>
+            <p class="row-desc">Supabase Storage</p>
+          </div>
+          <i class="ti ti-chevron-right chevron"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- นักพัฒนา -->
+    <div class="section">
+      <p class="section-title">นักพัฒนา</p>
+      <div class="card-group">
+        <a class="row" href="https://github.com/photolovertamsung" target="_blank" rel="noopener">
+          <div class="row-icon bg-gray"><i class="ti ti-brand-github"></i></div>
+          <div class="row-text">
+            <p class="row-name">GitHub Profile</p>
+            <p class="row-desc">photolovertamsung</p>
+          </div>
+          <i class="ti ti-chevron-right chevron"></i>
+        </a>
+      </div>
+    </div>
+
+    <p class="footer">Polaroid_tamsung · Team use only</p>
+
+  </div>
+</body>
+</html>
